@@ -1,6 +1,6 @@
 
 //Width and height of map
-var width = 860;
+var width = 800;
 var height = 500;
 
 var lowColor = '#d9d9d9'
@@ -22,6 +22,18 @@ var svg = d3.select("body")
   .append("svg")
   .attr("width", width)
   .attr("height", height);
+
+var svg_graph = d3.select("body")
+  .append("svg")
+  .attr("width", 600)
+  .attr("height", 500);
+
+svg_graph.append("rect")
+	.attr("x", 0)
+	.attr("y", 0)
+	.attr("width", 600)
+	.attr("height", 500)
+	.attr("fill", "aliceblue");
 
 svg.append("text")
 	.attr("x", 150)
@@ -75,7 +87,13 @@ d3.csv("../college_state_averages.csv", function(data) {
       .enter()
       .append("path")
       .attr("d", path)
-      .style("stroke", "#fff")
+      // .style("stroke", "#fff")
+		.style("stroke", function(d) {
+			if (d.properties.name == "California") {
+				return "#000"
+			}
+			return "#fff"
+		})
       .style("stroke-width", "1")
       .style("fill", function(d) {
       	console.log(d.properties);
