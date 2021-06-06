@@ -113,7 +113,6 @@ date,state,county,city,ipeds_id,college,cases,cases_2021,notes
 2021-05-26,California,Los Angeles,Claremont,115409,Harvey Mudd College,6,1,
 2021-05-26,California,Alameda,Oakland,115728,Holy Names University,20,12,
 2021-05-26,California,Humboldt,Arcata,115755,Humboldt State University,127,74,
-2021-05-26,California,Los Angeles,Los Angeles,laccd,Los Angeles Community College District,185,,College did not clarify whether data includes duplicate cases.
 2021-05-26,California,Los Angeles,Los Angeles,117946,Loyola Marymount University,86,52,
 2021-05-26,California,San Mateo,Atherton,118693,Menlo College,21,11,
 2021-05-26,California,Alameda,Oakland,118888,Mills College,5,1,
