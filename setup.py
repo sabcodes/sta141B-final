@@ -88,9 +88,34 @@ print(state_averages)
 
 state_averages.to_csv('college_state_averages.csv')
 
+counties = pd.read_csv("counties.csv")
 
-# print(colleges)
+states = counties.groupby('state').sum()
+print(states)
 
+better_pop_data = pd.read_csv('co-est2020-alldata.csv')
+
+better_pop_data = better_pop_data[["STNAME", "CTYNAME", "POPESTIMATE2020", "COUNTY"]]
+
+
+state_pops = better_pop_data[better_pop_data["COUNTY"] == 0]
+state_pops = state_pops.drop(columns=["COUNTY", "CTYNAME"])
+
+county_pops = better_pop_data[better_pop_data["COUNTY"] != 0]
+county_pops = county_pops.drop(columns=["COUNTY"])
+
+
+state_pops.to_csv('state_pops.csv')
+county_pops.to_csv('county_pops.csv')
+
+states = pd.merge(states, state_pops, right_on="STNAME", left_on="state")
+
+states['cases_per_capita'] = states['cases'] / states['POPESTIMATE2020']
+
+states.to_csv("states.csv")
+
+
+# colleges = pd.merge(colleges, df, right_on="id", left_on="ipeds_id")
 
 
 
