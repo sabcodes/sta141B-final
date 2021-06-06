@@ -1,15 +1,15 @@
 
 //Width and height of map
-var width = 960;
-var height = 500;
+var width = 860;
+var height = 400;
 
-var lowColor = '#f9f9f9'
-var highColor = '#bc2a66'
+var lowColor = '#d9d9d9'
+var highColor = '#464abc'
 
 // D3 Projection
 var projection = d3.geoAlbersUsa()
   .translate([width / 2, height / 2]) // translate to center of screen
-  .scale([1000]); // scale things down so see entire US
+  .scale([800]); // scale things down so see entire US
 
 // Define path generator
 var path = d3.geoPath() // path generator that will convert GeoJSON to SVG paths
@@ -28,7 +28,9 @@ d3.csv("../college_state_averages.csv", function(data) {
 		dataArray.push(parseFloat(data[d].cases_per_capita))
 	}
 	var minVal = d3.min(dataArray)
+	console.log(minVal)
 	var maxVal = d3.max(dataArray)
+	console.log(maxVal)
 	var ramp = d3.scaleLinear().domain([minVal,maxVal]).range([lowColor,highColor])
 
   // Load GeoJSON data and merge with states data
@@ -42,7 +44,7 @@ d3.csv("../college_state_averages.csv", function(data) {
 
 
       // Grab data value
-      var dataValue = data[i].value;
+      var dataValue = data[i].cases_per_capita;
 
       // Find the corresponding state inside the GeoJSON
       for (var j = 0; j < json.features.length; j++) {
@@ -67,7 +69,10 @@ d3.csv("../college_state_averages.csv", function(data) {
       .attr("d", path)
       .style("stroke", "#fff")
       .style("stroke-width", "1")
-      .style("fill", function(d) { return ramp(d.properties.value) });
+      .style("fill", function(d) {
+      	console.log(d.properties);
+      	return ramp(d.properties.value);
+      });
 
 		// add a legend
 		var w = 140, h = 300;
