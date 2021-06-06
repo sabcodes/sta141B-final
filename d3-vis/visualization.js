@@ -22,10 +22,10 @@ var svg = d3.select("body")
   .attr("height", height);
 
 // Load in my states data!
-d3.csv("statesdata.csv", function(data) {
+d3.csv("../college_state_averages.csv", function(data) {
 	var dataArray = [];
 	for (var d = 0; d < data.length; d++) {
-		dataArray.push(parseFloat(data[d].value))
+		dataArray.push(parseFloat(data[d].cases_per_capita))
 	}
 	var minVal = d3.min(dataArray)
 	var maxVal = d3.max(dataArray)
@@ -40,6 +40,7 @@ d3.csv("statesdata.csv", function(data) {
       // Grab State Name
       var dataState = data[i].state;
 
+
       // Grab data value
       var dataValue = data[i].value;
 
@@ -47,7 +48,7 @@ d3.csv("statesdata.csv", function(data) {
       for (var j = 0; j < json.features.length; j++) {
         var jsonState = json.features[j].properties.name;
 
-        if (dataState == jsonState) {
+        if (dataState == jsonState ) {
 
           // Copy the data value into the JSON
           json.features[j].properties.value = dataValue;

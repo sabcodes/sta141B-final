@@ -76,7 +76,16 @@ colleges["locale_name_detailed"] = colleges['school.locale'].map(locale_dict_det
 
 colleges.to_csv('colleges_with_pop.csv')
 
-print(colleges)
+state_averages = colleges.groupby('state').mean()
+
+state_averages = state_averages.drop(columns=["ipeds_id", "school.locale", "id", "ipeds_id", "2018.student.enrollment.undergrad_12_month"])
+
+# print(state_averages)
+
+state_averages.to_csv('college_state_averages.csv')
+
+
+# print(colleges)
 
 
 
