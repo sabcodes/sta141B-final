@@ -28,18 +28,22 @@ var svg_graph = d3.select("body")
   .attr("width", 600)
   .attr("height", 500);
 
-svg_graph.append("rect")
-	.attr("x", 0)
-	.attr("y", 0)
-	.attr("width", 600)
-	.attr("height", 500)
-	.attr("fill", "aliceblue");
+var selected_state_title = svg_graph.append("text")
+	.attr("x", 150)
+	.attr("y", 40)
+	.attr("font-size", 25)
+	.text("All States");
 
 svg.append("text")
 	.attr("x", 150)
 	.attr("y", 40)
 	.attr("font-size", 25)
-	.text("Average Cases Per Capita At Colleges")
+	.text("Average Total Cases Per Capita At Colleges");
+
+var selected = null;
+var old_selected = function() {
+
+};
 
 // Load in my states data!
 d3.csv("../college_state_averages.csv", function(data) {
@@ -87,18 +91,35 @@ d3.csv("../college_state_averages.csv", function(data) {
       .enter()
       .append("path")
       .attr("d", path)
-      // .style("stroke", "#fff")
-		.style("stroke", function(d) {
-			if (d.properties.name == "California") {
-				return "#000"
-			}
-			return "#fff"
-		})
+      .style("stroke", "#fff")
       .style("stroke-width", "1")
       .style("fill", function(d) {
       	console.log(d.properties);
       	return ramp(d.properties.value);
-      });
+      })
+		.on("click", function(d) {
+			old_selected();
+			if (selected == d) {
+				d3.select(this).style("fill", ramp(d.properties.value));
+				selected = null;
+				old_selected = function () {
+					// d3.select(this).style("fill", ramp(d.properties.value));
+				}
+				selected_state_title.text("All States");
+			} else {
+				// old_selected();
+
+				d3.select(this).style("fill", "#0f0");
+				selected = d;
+
+				var thingy = d3.select(this);
+
+				old_selected = function () {
+					thingy.style("fill", ramp(d.properties.value));
+				}
+				selected_state_title.text(d.properties.name);
+			}
+		});
 
 		// add a legend
 		var w = 140, h = 300;
