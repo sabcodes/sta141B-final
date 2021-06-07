@@ -1,5 +1,9 @@
 # sta141B-final
 
+Group members:
+Christopher White
+Sabarno Islam
+
 Our project conclusions and visualizations are included in the 
 jupyter notebooks and in the html file found in the folder `d3-vis`
 
