@@ -5,7 +5,7 @@ Christopher White,
 Sabarno Islam
 
 Our project conclusions and visualizations are included in the 
-jupyter notebook (Date-Graphs) and in the html file found in the folder `d3-vis`
+jupyter notebook (Date-Graphs notebook file) and in the html file found in the folder `d3-vis`
 
 The html file `d3-vis/index.html` has a d3 visualization of the average per capita infection rates at colleges.
 clicking on a state gives the average for that state for colleges in different areas, such as urban or rural.
@@ -23,7 +23,7 @@ requests where cached in a sql lite database
 Colleges in the rural fringe have the least number of cases per capita overall, 
 however there is some variation from state to state.
 
-Please see the Data-Graphs jupyter notebook in the root directory for further conclusions.
+Please see the Data-Graphs jupyter notebook file in the root directory for further conclusions.
 
 
 
