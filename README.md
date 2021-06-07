@@ -1,7 +1,7 @@
 # sta141B-final
 
 Group members:
-Christopher White
+Christopher White,
 Sabarno Islam
 
 Our project conclusions and visualizations are included in the 
