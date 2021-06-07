@@ -21,6 +21,49 @@ var svg = d3.select("body")
     .attr("width", width)
     .attr("height", height);
 
+svg.append("text")
+    .attr("x", 150)
+    .attr("y", 40)
+    .attr("font-size", 25)
+    .text("Average Total Cases Per Capita At Colleges");
+
+svg.append("text")
+    .attr("x", 300)
+    .attr("y", 70)
+    .attr("font-size", 20)
+    .text("You can click!");
+
+
+var selected = null;
+var old_selected = function () {
+
+};
+
+var parts = {};
+
+var data_states = {};
+// var data_states;
+
+d3.json("../states.json", function (d) {
+    data_states['states'] = d;
+});
+
+// states = states[0];
+
+d3.json("../data_states.json", function (d) {
+    data_states['data_states'] = d;
+});
+
+d3.json("../all_states.json", function (d) {
+    data_states['all_states'] = d;
+});
+
+d3.json("../sample.json", function (d) {
+    data_states['sample'] = d;
+});
+
+console.log(data_states);
+
 var svg_graph = d3.select("body")
     .append("svg")
     .attr("width", 600)
@@ -32,43 +75,170 @@ var selected_state_title = svg_graph.append("text")
     .attr("font-size", 25)
     .text("All States");
 
-svg.append("text")
-    .attr("x", 150)
-    .attr("y", 40)
-    .attr("font-size", 25)
-    .text("Average Total Cases Per Capita At Colleges");
+var graph_side_graph = function (state) {
+    svg_graph.selectAll("*").remove();
+    if (state == null) {
+        selected_state_title = svg_graph.append("text")
+            .attr("x", 150)
+            .attr("y", 40)
+            .attr("font-size", 25)
+            .text("All States");
 
-var selected = null;
-var old_selected = function () {
+        var x = d3.scaleBand().range([0, 500]).domain(Object.keys(data_states.all_states)).paddingInner(0.6);
+        var y = d3.scaleLinear().range([400, 0]);
 
-};
+
+        x = x.domain(Object.keys(data_states.all_states));
+
+        var xAxis = d3.axisBottom().scale(x);
+        var yAxis = d3.axisLeft().scale(y);
+
+        var max = 0;
+
+        for (part in data_states.all_states) {
+            var temp = data_states.all_states[part].cases_per_capita;
+            if (temp > max) {
+                max = temp;
+            }
+        }
+
+        y.domain([0, max]);
+
+        svg_graph.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(50," + 400 + ")")
+            .call(xAxis)
+            .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", "-.55em")
+            .attr("transform", "rotate(-90)");
+
+        svg_graph.append("g")
+            .attr("class", "y axis")
+            .attr("transform", "translate(50," + 0 + ")")
+            .call(yAxis)
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 20)
+            .style("text-anchor", "end")
+            .text("Frequency");
+
+        svg_graph.append("text")
+            .attr("transform", "rotate(90)")
+            .attr("x", 50)
+            .attr("y", 0)
+            .attr("font-size", 16)
+            .text("Per capita cases for colleges at types of locations");
+
+
+        // console.log(data_states.all_states);
+
+        for (var part in data_states.all_states) {
+            svg_graph.append("rect")
+                .attr("x", x(part) + 50)
+                .attr("fill", "skyblue")
+                .attr("width", x.bandwidth())
+                .attr("y", y(data_states.all_states[part].cases_per_capita))
+                .attr("height", function (d) {
+                    return 400 - y(data_states.all_states[part].cases_per_capita);
+                });
+        }
+
+        //All states
+    } else {
+        var x = d3.scaleBand().range([0, 500]).domain(Object.keys(data_states.sample[state])).paddingInner(0.6);
+        var y = d3.scaleLinear().range([400, 0]);
+
+        console.log(data_states.sample[state]);
+
+
+        x = x.domain(Object.keys(data_states.sample[state]));
+
+        var xAxis = d3.axisBottom().scale(x);
+        var yAxis = d3.axisLeft().scale(y);
+
+        var max = 0;
+
+        for (thingy in data_states.sample[state]) {
+            var temp = data_states.sample[state][thingy];
+            if (temp > max) {
+                max = temp;
+            }
+        }
+
+        y.domain([0, max]);
+
+        svg_graph.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(50," + 400 + ")")
+            .call(xAxis)
+            .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", "-.55em")
+            .attr("transform", "rotate(-90)");
+
+        svg_graph.append("g")
+            .attr("class", "y axis")
+            .attr("transform", "translate(50," + 0 + ")")
+            .call(yAxis)
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 20)
+            .attr("dy", ".71em")
+            .style("text-anchor", "end")
+            .text("Frequency");
+
+        svg_graph.append("text")
+            .attr("transform", "rotate(90)")
+            .attr("x", 50)
+            .attr("y", 0)
+            .attr("font-size", 16)
+            .text("Per capita cases for colleges at types of locations");
+
+        // console.log(data_states.all_states);
+
+        for (var part in data_states.sample[state]) {
+            // console.log(data_states.all_states[part].cases_per_capita);
+            svg_graph.append("rect")
+                .attr("x", x(part) + 50)
+                .attr("fill", "skyblue")
+                .attr("width", x.bandwidth())
+                .attr("y", y(data_states.sample[state][part]))
+                .attr("height", function (d) {
+                    return 400 - y(data_states.sample[state][part]);
+                });
+        }
+
+         selected_state_title = svg_graph.append("text")
+            .attr("x", 150)
+            .attr("y", 40)
+            .attr("font-size", 25)
+            .text(state);
+    }
+}
+
+
+// svg_graph.append
 
 // Load in my states data!
 d3.csv("../college_state_averages.csv", function (data) {
     var dataArray = [];
     for (var d = 0; d < data.length; d++) {
-        dataArray.push(parseFloat(data[d].cases_per_capita))
+        dataArray.push(parseFloat(data[d].cases_per_capita));
     }
-    var minVal = d3.min(dataArray)
-    console.log(minVal)
-    var maxVal = d3.max(dataArray)
-    console.log(maxVal)
-    var ramp = d3.scaleLinear().domain([minVal, maxVal]).range([lowColor, highColor])
+    var minVal = d3.min(dataArray);
+    var maxVal = d3.max(dataArray);
+    var ramp = d3.scaleLinear().domain([minVal, maxVal]).range([lowColor, highColor]);
 
-    // Load GeoJSON data and merge with states data
     d3.json("us-states.json", function (json) {
 
-        // Loop through each state data value in the .csv file
         for (var i = 0; i < data.length; i++) {
 
-            // Grab State Name
             var dataState = data[i].state;
-
-
-            // Grab data value
             var dataValue = data[i].cases_per_capita;
 
-            // Find the corresponding state inside the GeoJSON
             for (var j = 0; j < json.features.length; j++) {
                 var jsonState = json.features[j].properties.name;
 
@@ -83,7 +253,6 @@ d3.csv("../college_state_averages.csv", function (data) {
             }
         }
 
-        // Bind the data to the SVG and create one path per GeoJSON feature
         svg.selectAll("path")
             .data(json.features)
             .enter()
@@ -92,7 +261,6 @@ d3.csv("../college_state_averages.csv", function (data) {
             .style("stroke", "#fff")
             .style("stroke-width", "1")
             .style("fill", function (d) {
-                console.log(d.properties);
                 return ramp(d.properties.value);
             })
             .on("click", function (d) {
@@ -101,12 +269,9 @@ d3.csv("../college_state_averages.csv", function (data) {
                     d3.select(this).style("fill", ramp(d.properties.value));
                     selected = null;
                     old_selected = function () {
-                        // d3.select(this).style("fill", ramp(d.properties.value));
                     }
-                    selected_state_title.text("All States");
+                    graph_side_graph(null);
                 } else {
-                    // old_selected();
-
                     d3.select(this).style("fill", "#0f0");
                     selected = d;
 
@@ -115,9 +280,12 @@ d3.csv("../college_state_averages.csv", function (data) {
                     old_selected = function () {
                         thingy.style("fill", ramp(d.properties.value));
                     }
-                    selected_state_title.text(d.properties.name);
+                    // selected_state_title.text(d.properties.name);
+                    graph_side_graph(d.properties.name);
                 }
             });
+
+        graph_side_graph(null);
 
         // add a legend
         var w = 140, h = 300;
@@ -165,3 +333,6 @@ d3.csv("../college_state_averages.csv", function (data) {
             .call(yAxis)
     });
 });
+
+// graph_side_graph(null);
+
