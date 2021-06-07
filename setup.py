@@ -29,7 +29,7 @@ df = df[df['num_students'] > 1500]
 
 # print(df.head())
 
-print(len(df.index))
+# print(len(df.index))
 
 locale_dict_detailed = {
     11.0: "City: Large (population of 250,000 or more)",
@@ -83,7 +83,7 @@ state_averages = state_averages.drop(columns=["ipeds_id", "school.locale", "id",
 state_averages["cases_per_capita"] = state_averages["cases"] / state_averages["num_students"]
 
 
-print(state_averages)
+# print(state_averages)
 
 
 state_averages.to_csv('college_state_averages.csv')
@@ -91,7 +91,7 @@ state_averages.to_csv('college_state_averages.csv')
 counties = pd.read_csv("counties.csv")
 
 states = counties.groupby('state').sum()
-print(states)
+# print(states)
 
 better_pop_data = pd.read_csv('co-est2020-alldata.csv')
 
@@ -113,6 +113,56 @@ states = pd.merge(states, state_pops, right_on="STNAME", left_on="state")
 states['cases_per_capita'] = states['cases'] / states['POPESTIMATE2020']
 
 states.to_csv("states.csv")
+
+colleges['county_state'] = colleges['county'] + ' ' + colleges['state']
+
+# print(colleges.head())
+
+thingy = colleges.groupby(['state', 'locale_name']).sum()
+
+thingy = thingy.drop(columns=['2018.student.enrollment.undergrad_12_month', 'ipeds_id', 'id', 'school.locale', 'cases_2021'])
+
+thingy['cases_per_capita'] = thingy['cases'] / thingy['num_students']
+
+# print(thingy)
+
+thingy.to_json("data_states.json", orient='index')
+thingy.to_csv("data_states.csv")
+
+# print(thingy)
+
+data_dict = {}
+
+# thingy['state'] = thingy['state']
+
+for index, row in thingy.iterrows():
+    if index[0] not in data_dict:
+        data_dict[index[0]] = {}
+    data_dict[index[0]][index[1]] = row[2]
+# print(data_dict)
+
+
+with open("sample.json", "w") as outfile:
+    json.dump(data_dict, outfile)
+
+
+all_states = thingy.groupby('locale_name').sum()
+
+all_states['cases_per_capita'] = all_states['cases'] / all_states['num_students']
+
+# print(all_states.head())
+
+all_states.to_json('all_states.json', orient='index')
+
+states = states[['STNAME', 'cases_per_capita']]
+
+states = states.set_index('STNAME')
+
+
+# print(states.head())
+
+states.to_json('states.json', orient='index')
+
 
 
 # colleges = pd.merge(colleges, df, right_on="id", left_on="ipeds_id")
