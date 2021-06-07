@@ -8,7 +8,8 @@ Our project conclusions and visualizations are included in the
 jupyter notebook (Date-Graphs notebook file) and in the html file found in the folder `d3-vis`
 
 The html file `d3-vis/index.html` has a d3 visualization of the average per capita infection rates at colleges.
-clicking on a state gives the average for that state for colleges in different areas, such as urban or rural.
+clicking on a state gives the average for that state for colleges in different areas, such as urban or rural. 
+Please use FireFox to open the html file to view. It does not work on chrome. Another way to view it is through pychrarm and its local server. 
 
 The original 4 csv files, `us-counties.csv` `us-states.csv` `co-est2020-alldata.csv` `colleges.csv`
 
