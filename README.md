@@ -23,7 +23,7 @@ requests where cached in a sql lite database
 Colleges in the rural fringe have the least number of cases per capita overall, 
 however there is some variation from state to state.
 
-Please see the Data-Graphs jupyter notebook in the root bin for further conclusions.
+Please see the Data-Graphs jupyter notebook in the root directory for further conclusions.
 
 
 
